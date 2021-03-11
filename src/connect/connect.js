@@ -45,7 +45,9 @@ function strictEqual(a, b) {
 // different options opens up some testing and extensibility scenarios
 export function createConnect({
   connectHOC = connectAdvanced,
+  // staetToProps的工厂
   mapStateToPropsFactories = defaultMapStateToPropsFactories,
+  // dispatchToProps的工厂
   mapDispatchToPropsFactories = defaultMapDispatchToPropsFactories,
   mergePropsFactories = defaultMergePropsFactories,
   selectorFactory = defaultSelectorFactory,
@@ -53,6 +55,7 @@ export function createConnect({
   return function connect(
     mapStateToProps,
     mapDispatchToProps,
+    // 如果指定了这个参数，mapStateToProps（）与mapDispatchToProps（）的执行结果和组件自身的props将传入到这个回调函数中。
     mergeProps,
     {
       pure = true,

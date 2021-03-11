@@ -6,6 +6,8 @@ import { getBatch } from './batch'
 
 const nullListeners = { notify() {} }
 
+// 创建监听器容器
+// listener为指针形状
 function createListenerCollection() {
   const batch = getBatch()
   let first = null
@@ -17,6 +19,7 @@ function createListenerCollection() {
       last = null
     },
 
+    // 通知每个监听器 
     notify() {
       batch(() => {
         let listener = first
@@ -27,6 +30,7 @@ function createListenerCollection() {
       })
     },
 
+    // 获取监听器容器
     get() {
       let listeners = []
       let listener = first
@@ -90,6 +94,7 @@ export default class Subscription {
     this.listeners.notify()
   }
 
+  // Store回调处理
   handleChangeWrapper() {
     if (this.onStateChange) {
       this.onStateChange()
@@ -100,10 +105,13 @@ export default class Subscription {
     return Boolean(this.unsubscribe)
   }
 
+  // 订阅
   trySubscribe() {
+    // 不存在订阅情况
     if (!this.unsubscribe) {
       this.unsubscribe = this.parentSub
         ? this.parentSub.addNestedSub(this.handleChangeWrapper)
+        // 从store的订阅，当有Dispatch的时候 执行handleChangeWrapper的回调
         : this.store.subscribe(this.handleChangeWrapper)
 
       this.listeners = createListenerCollection()

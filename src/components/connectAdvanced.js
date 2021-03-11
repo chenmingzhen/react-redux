@@ -1,3 +1,4 @@
+// hoist-non-react-statics 拷贝所有静态方法给新组件
 import hoistStatics from 'hoist-non-react-statics'
 import React, { useContext, useMemo, useRef, useReducer } from 'react'
 import { isValidElementType, isContextConsumer } from 'react-is'
@@ -184,6 +185,7 @@ export default function connectAdvanced(
     renderCountProp = undefined,
 
     // determines whether this HOC subscribes to store changes
+    // 确定此HOC是否订阅存储更改
     shouldHandleStateChanges = true,
 
     // REMOVED: the key of props/context to get the store
@@ -246,6 +248,7 @@ export default function connectAdvanced(
     const wrappedComponentName =
       WrappedComponent.displayName || WrappedComponent.name || 'Component'
 
+    // 展示名称
     const displayName = getDisplayName(wrappedComponentName)
 
     const selectorFactoryOptions = {
@@ -262,6 +265,7 @@ export default function connectAdvanced(
 
     const { pure } = connectOptions
 
+    // 创建子的选择器
     function createChildSelector(store) {
       return selectorFactory(store.dispatch, selectorFactoryOptions)
     }
@@ -285,6 +289,8 @@ export default function connectAdvanced(
       }, [props])
 
       const ContextToUse = useMemo(() => {
+        //用户可以传入一个自定义上下文实例来代替我们的ReactReduxContext。
+        // Memoize决定应该使用哪个上下文实例的检查。
         // Users may optionally pass in a custom context instance to use instead of our ReactReduxContext.
         // Memoize the check that determines which context instance we should use.
         return propsContext &&
